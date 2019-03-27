@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+import six
 
 from .pdffont import PDFUnicodeNotDefined
 
@@ -55,7 +58,7 @@ class PDFDevice(object):
     def render_image(self, name, stream):
         return
 
-    def render_string(self, textstate, seq):
+    def render_string(self, textstate, seq, ncs, graphicstate):
         return
 
 
@@ -142,12 +145,13 @@ class TagExtractor(PDFDevice):
         self._stack = []
         return
 
-    def render_string(self, textstate, seq):
+    def render_string(self, textstate, seq, ncs, graphicstate):
         font = textstate.font
         text = ''
         for obj in seq:
-            obj = utils.make_compat_str(obj)
-            if not isinstance(obj, str):
+            if isinstance(obj, six.text_type):
+                obj = utils.make_compat_bytes(obj)
+            if not isinstance(obj, six.binary_type):
                 continue
             chars = font.decode(obj)
             for cid in chars:
