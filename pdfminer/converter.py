@@ -343,13 +343,12 @@ class HTMLConverter(PDFConverter):
         self.write('</div>')
         return
 
-    def put_text(self, text, fontname, fontsize):
-        font = (fontname, fontsize)
+    def put_text(self, text, fontname, ncsname, ncscolor, fontsize):
+        font = (fontname, fontsize, ncsname, ncscolor)
         if font != self._font:
             if self._font is not None:
                 self.write('</span>')
-            self.write('<span style="font-family: %s; font-size:%dpx">' %
-                       (enc(fontname), fontsize * self.scale * self.fontscale))
+            self.write('<span style="font-family: %s; colourspace: %s, ncolour: %s, font-size:%dpx">' % (enc(fontname), ncsname, ncscolor, fontsize * self.scale * self.fontscale))
             self._font = font
         self.write_text(text)
         return
@@ -415,7 +414,7 @@ class HTMLConverter(PDFConverter):
                             render(child)
                         self.end_div('textbox')
                     elif isinstance(item, LTChar):
-                        self.put_text(item.get_text(), item.fontname, item.size)
+                        self.put_text(item.get_text(), item.fontname, item.ncs.name, item.graphicstate.ncolor, item.size)
                     elif isinstance(item, LTText):
                         self.write_text(item.get_text())
             return
