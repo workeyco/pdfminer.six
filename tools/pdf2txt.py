@@ -7,7 +7,12 @@ import argparse
 import logging
 import six
 import sys
-#sys.path.insert(0, 'submodules/pdfminer/') #not needed anymore
+
+# this workaround is to assure that we try to import pdfminer from the submodule, and not from installed original package
+good_paths = [p for p in sys.path if p.endswith('submodules/pdfminer')]
+for g in good_paths:
+    sys.path.insert(0, g)
+
 import pdfminer.settings
 pdfminer.settings.STRICT = False
 import pdfminer.high_level
