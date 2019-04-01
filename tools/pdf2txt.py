@@ -7,7 +7,7 @@ import argparse
 import logging
 import six
 import sys
-sys.path.insert(0, 'submodules/pdfminer/')
+#sys.path.insert(0, 'submodules/pdfminer/') #not needed anymore
 import pdfminer.settings
 pdfminer.settings.STRICT = False
 import pdfminer.high_level
